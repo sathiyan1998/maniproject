@@ -1,0 +1,209 @@
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        .pageContent {
+            margin-top: 70px !important;
+            margin: 20px;
+        }
+
+        .pageNavigation {
+            position: fixed;
+            width: 100%;
+            z-index: 1;
+            top: 0px;
+            margin: 0px;
+        }
+
+        /* .hide {
+            display: none;
+        } */
+    </style>
+</head>
+
+<body>
+    <div class="row pageNavigation">
+        <div class="col-md-12">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">User Management</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="createAccountLink"><a href="javascript:void(0)"><span
+                                    class="glyphicon glyphicon-user"></span> Create Account</a></li>
+                        <li class="loginLink active"><a href="javascript:void(0)"><span
+                                    class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <!-- <li class="logoutLink hide" onclick="logout()"><a href="javascript:void(0)"><span
+                                    class="glyphicon glyphicon-log-out"></span> Logout</a></li> -->
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="pageContent">
+        <div class="row pages loginPage">
+            <div class="col-md-12">
+                <form>
+                    <div class="form-group">
+                        <label for="loginEmail">Email address</label>
+                        <input type="email" class="form-control" id="loginEmail" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Password">
+                    </div>
+                    <button type="button" class="btn btn-primary login" onclick="login()">Login</button>
+                </form>
+            </div>
+        </div>
+        <div class="row pages createAccountPage hide">
+            <div class="col-md-12">
+                <form>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="Enter First Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" class="form-control" id="age" placeholder="Enter Your Age">
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input admin" type="checkbox" id="admin" value="Admin">
+                        <label class="form-check-label" for="admin">Is Admin</label>
+                    </div>
+                    <div class="form-group"><label for="game">Game</label></div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input game" type="checkbox" id="cricket" value="Cricket">
+                        <label class="form-check-label" for="cricket">Cricket</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input game" type="checkbox" id="kabadi" value="Kabadi">
+                        <label class="form-check-label" for="kabadi">Kabadi</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input game" type="checkbox" id="footBall" value="Football">
+                        <label class="form-check-label" for="footBall">Football</label>
+                    </div>
+                    <button type="button" class="btn btn-primary createAccount" onclick="createAccount()">Create
+                        Account</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row pages homePage hide">
+            <div class="col-md-12">
+                <h1 id="welcomeMessage"></h1>
+                
+            </div>
+        </div>
+    </div>
+
+
+   
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script>
+        var user = {};
+        var usersList = [];
+        
+        //onclick of create account form
+        function createAccount() {
+            //Do all the required Validations
+            user = {
+                
+                firstName: $("#firstName").val(),
+                lastName: $("#lastName").val(),
+                email: $("#email").val(),
+                password: $("#password").val(),
+                age: $("#age").val(),
+                game: [],
+                
+            }
+            $(".game:checked").each(function () {
+                user.game.push($(this).val());
+            });
+            usersList.push(user);
+           
+            console.log(usersList);
+        }
+
+        //Method for Login into system
+        function login() {
+            var i;
+            var isUserLoggedIn = false;
+            var loggedInUserDetails;
+            if (usersList.length === 0) {
+                alert("The user not exist");
+            } else {
+                for (i = 0; i < usersList.length; i++) {
+                    if (usersList[i].email === $("#loginEmail").val() && usersList[i].password === $("#loginPassword").val()) {
+                        isUserLoggedIn = true;
+                        loggedInUserDetails = usersList[i];
+                    }
+                }
+                if (isUserLoggedIn === true) {
+                    
+                    $(".pages").addClass('hide');
+                    $(".homePage").removeClass('hide');
+                    
+
+                       
+                        
+                        $("#welcomeMessage").text("Welcome " + loggedInUserDetails.firstName + " " + loggedInUserDetails.lastName);
+                    }  else {
+                        
+    
+
+                    alert("Please enter the valid credentials");
+                }
+            }
+         }
+
+       
+
+        
+        $(document).ready(function () {
+            $(".createAccountLink").click(function () {
+                $(".pages").addClass('hide');
+                $(".createAccountPage").removeClass("hide");
+                $(".nav li").removeClass("active");
+                $(this).addClass("active"); //$(".createAccountLink").addClass("active");
+
+            });
+            $(".loginLink").click(function () {
+                $(".pages").addClass('hide');
+                $(".loginPage").removeClass("hide");
+                $(".nav li").removeClass("active");
+                $(this).addClass("active"); //$(".loginLink").addClass("active");
+
+            });
+        })
+
+    </script>
+</body>
+
+</html>
